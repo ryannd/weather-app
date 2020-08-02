@@ -1,0 +1,12 @@
+#right {
+    background-color: #0466C8;
+    color: white;
+}
+
+#left {
+    background-color: #001233;
+}
+
+html, body {
+    height: 100%;
+}
