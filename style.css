@@ -1,6 +1,10 @@
 #right {
+    display: flex;
+    flex-direction: column;
+    padding-top: 11vh;
     background-color: #0466C8;
     color: white;
+    text-align: center;
 }
 
 #left {
@@ -9,4 +13,15 @@
 
 html, body {
     height: 100%;
+}
+
+
+
+#location {
+    font-family: 'Mulish', sans-serif;
+    font-size: 92px;
+}
+
+#conditions #temperature {
+    font-family: 'Raleway', sans-serif;
 }
