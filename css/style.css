@@ -1,0 +1,67 @@
+#right {
+    display: flex;
+    flex-direction: column;
+    padding-top: 5vh;
+    text-align: center;
+    align-items: center;
+    background-color: #1b1c25;
+    color: white;
+}
+
+#left {
+    padding: 0;
+    margin: 0;
+}
+
+#date-header {
+    float: left;
+    font-family: 'Raleway', sans-serif;
+    font-size: calc(.5em + 1vw);
+}
+#time-header {
+    float: right;
+    font-family: 'Raleway', sans-serif;
+    font-size: calc(.5em + 1vw);
+}
+
+html, body {
+    height: 100%;
+}
+
+.main-weather-data {
+    padding-top: 10px;
+}
+
+#location {
+    font-family: 'Mulish', sans-serif;
+    font-size: calc(1em + 4vw);
+}
+
+#conditions #temperature {
+    font-family: 'Raleway', sans-serif;
+
+}
+
+#conditions {
+    font-size: calc(1em + 1vw);
+}
+
+#temperature {
+    font-size: calc(1em + 1vw);
+}
+
+#welcome-header {
+    color: white;
+    font-size: calc(1em + 1vw);
+}
+
+.bottom-data {
+    display: flex;
+    flex-direction: row;
+}
+
+.component {
+    background-color: white;
+}
+
+#mapid { height: 100vh; }
