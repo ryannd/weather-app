@@ -11,11 +11,12 @@ const searchButton = document.getElementById('button-addon5');
 const searchText = document.getElementById('searchtext');
 const icon = document.getElementById('icon')
 const timeHeader = document.getElementById('time-header');
-const dateHeader = document.getElementById('date-header')
+const dateHeader = document.getElementById('date-header');
+const mapDiv = document.getElementById('mapid');
+const fiveDayForecastTable = document.getElementById('fiveday');
 let iconId;
 let lat;
 let lon;
-let getCoords = new XMLHttpRequest();
 let map;
 
 window.addEventListener('load', () => {
@@ -27,6 +28,7 @@ window.addEventListener('load', () => {
 
             const url = `${proxy}https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${KEY}&units=imperial`
             getData(url);
+            getFiveDayForecast(lat,lon);
             setWeatherMap(lat,lon);
         });
     }
@@ -37,6 +39,8 @@ window.addEventListener('load', () => {
 
 async function getData(url) {
     await fetch(url).then((result) => result.json()).then((result) => {
+        console.log('----------Weather Data----------');
+        console.log(result);
         if(result.name === undefined){
             loc.innerHTML = "Location not found!";
             temp.style.display = "none";
@@ -44,7 +48,6 @@ async function getData(url) {
             icon.style.display = "none";
         }
         else {
-            console.log(result);
             temp.style.display = "flex";
             cond.style.display = "flex";
             icon.style.display = "flex";
@@ -59,17 +62,17 @@ async function getData(url) {
 
 searchButton.addEventListener('click', () => {
     const mapKey = 'CMLeIc30GHdTs4cwIZpACBJOOOPDf0Bj';
-    let search = document.getElementById('searchtext').value;
+    let search = searchText.value;
     fetch(`http://open.mapquestapi.com/geocoding/v1/address?key=${mapKey}&location=${search}`)
         .then(response => response.json())
         .then(data => {
+            console.log('----------Location Data----------');
+            console.log(data);
             lon = data.results[0].locations[0].latLng.lng;
             lat = data.results[0].locations[0].latLng.lat;
             const url = `${proxy}https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${KEY}&units=imperial`;
             getData(url);
-            map.flyTo(new L.LatLng(lat,lon), {animate: true});
-            loc.innerHTML = data.results[0].providedLocation.location;
-
+            map.setView(new L.LatLng(lat,lon));
         });
 })
 
@@ -123,10 +126,55 @@ function setWeatherMap(lat,lon) {
     let temp = L.OWM.temperature({showLegend: false,opacity: 0.3, appId: KEY});
     let baseMaps = { "OSM Standard": osm };
     let overlayMaps = { "Clouds": clouds, "Precipitation": precipitation, "Snow": snow, "Temperature": temp };
-    let layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+    let layerControl = L.control.layers(baseMaps, overlayMaps   ).addTo(map);
+}
+const eventList = ['mouseup', 'mousedown']
+for(evnt of eventList) {
+    mapDiv.addEventListener(evnt, () => {
+        let coords = map.getCenter();
+        lat = coords.lat;
+        lon = coords.lng;
+        const url = `${proxy}https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${KEY}&units=imperial`
+        getData(url);
+    })
+}
 
-    let gl = L.mapboxGL({
-        accessToken: '{token}',
-        style: `${proxy}https://github.com/openmaptiles/dark-matter-gl-style/blob/master/style.json`
-    }).addTo(map);
+function setAttributes(el, attrs) {
+    for(let key in attrs) {
+        el.setAttribute(key, attrs[key]);
+    }
+}
+
+async function getFiveDayForecast(lat,lon) {
+    const url = `${proxy}https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${KEY}&units=imperial`;
+    let counter = 0;
+    await fetch(url).then((result) => result.json()).then((result) => {
+        console.log('----------One Call Weather Data----------');
+        console.log(result);
+       let forecast = result.daily;
+       forecast.reverse();
+       forecast.forEach(item => {
+           let time = item.dt;
+           let itemDate = new Date(time * 1000);
+           let iconId = item.weather[0].icon;
+           let iconElement = document.createElement('OBJECT');
+           setAttributes(iconElement,{"type": "image/svg+xml", "width": "50px","height": "50px","data": `./icons/${iconId}.svg`});
+           let row = fiveDayForecastTable.insertRow(counter);
+           let dateCell = row.insertCell(0);
+           let condCell = row.insertCell(1);
+           let highCell = row.insertCell(2);
+           let lowCell = row.insertCell(3);
+           let iconCell = row.insertCell(4);
+
+           highCell.setAttribute('style','color: #FF4949');
+           lowCell.setAttribute('style','color: #0F4392');
+           condCell.setAttribute('style','text-align: left');
+           dateCell.innerHTML = itemDate.toLocaleDateString('en-us',options);
+           condCell.innerHTML = item.weather[0].main;
+           highCell.innerHTML = Math.floor(item.temp.max.toLocaleString());
+           lowCell.innerHTML = Math.floor(item.temp.min.toLocaleString())
+           iconCell.appendChild(iconElement);
+
+       })
+    });
 }

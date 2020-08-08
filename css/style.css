@@ -1,12 +1,15 @@
 #right {
     display: flex;
     flex-direction: column;
-    padding-top: 5vh;
+    padding-top: 3vh;
     text-align: center;
     align-items: center;
     background-color: #1b1c25;
     color: white;
+    height: 100vh;
+    overflow-y: scroll;
 }
+
 
 #left {
     padding: 0;
@@ -25,7 +28,8 @@
 }
 
 html, body {
-    height: 100%;
+    height: 100vh;
+    overflow: auto;
 }
 
 .main-weather-data {
@@ -65,3 +69,53 @@ html, body {
 }
 
 #mapid { height: 100vh; }
+
+#inner-right {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+}
+
+#search {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    height: 100%;
+    background-color: #1b1c25;
+
+}
+
+.forecast {
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.forecast-title {
+    font-size: calc(1em + 1.75vw);
+    font-family: 'Mulish', sans-serif;
+    margin-left: 5%;
+}
+
+#fiveday {
+    margin-top: 10px;
+    width: 28vw;
+    font-size: calc(.25em + .75vw);
+}
+
+@media(max-width: 990px){
+    #fiveday {
+        margin-top: 10px;
+        width: 100vw;
+        margin-right: 10vw;
+        font-size: calc(.75em + 1.25vw);
+    }
+    body{
+        max-width: 100vw;
+    }
+}
