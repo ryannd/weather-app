@@ -80,7 +80,8 @@ html, body {
 #search {
     position: -webkit-sticky; /* Safari */
     position: sticky;
-    top: 0;
+    top: -30px;
+    padding-top: 10px;
     height: 100%;
     background-color: #1b1c25;
 
