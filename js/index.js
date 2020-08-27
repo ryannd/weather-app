@@ -63,7 +63,7 @@ async function getData(url) {
 searchButton.addEventListener('click', () => {
     const mapKey = 'CMLeIc30GHdTs4cwIZpACBJOOOPDf0Bj';
     let search = searchText.value;
-    fetch(`http://open.mapquestapi.com/geocoding/v1/address?key=${mapKey}&location=${search}`)
+    fetch(`https://open.mapquestapi.com/geocoding/v1/address?key=${mapKey}&location=${search}`)
         .then(response => response.json())
         .then(data => {
             console.log('----------Location Data----------');
